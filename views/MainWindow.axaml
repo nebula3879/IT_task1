@@ -1,0 +1,197 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:SetApp"
+        x:Class="SetApp.MainWindow"
+        Title="Линейный список" Width="600" Height="600"
+        Background="#F5F5F5">
+
+    <Window.Resources>
+        <local:DarkenConverter x:Key="DarkenConverter"/>
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{Binding $parent[Button].Background, Converter={StaticResource DarkenConverter}}"/>
+            <Setter Property="TextBlock.Foreground" Value="White"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="CaretBrush" Value="Black"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="White"/>
+        </Style>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#333333"/>
+        </Style>
+    </Window.Styles>
+
+    <Border Padding="25" CornerRadius="10" BoxShadow="0 0 10 0 #15000000">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" 
+                    Background="White"
+                    CornerRadius="10" 
+                    Padding="20" 
+                    Margin="0,0,0,20"
+                    BoxShadow="0 2 10 0 #25000000">
+                <TextBlock Text="Линейный список" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="Black"
+                           HorizontalAlignment="Center"/>
+            </Border>
+
+            <Border Grid.Row="1" 
+                    Background="White" 
+                    CornerRadius="10" 
+                    Padding="20"
+                    BoxShadow="0 2 10 0 #15000000">
+                <StackPanel>
+                    <TextBlock Text="Добавить или удалить элемент:" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Margin="0,0,0,10"/>
+                    
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBox Name="InputBox" 
+                                 Grid.Column="0"
+                                 Padding="12" 
+                                 FontSize="16" 
+                                 Background="White" 
+                                 BorderBrush="#DDDDDD" 
+                                 Foreground="Black"
+                                 Watermark="Введите элемент..."/>
+                        
+                        <Button Name="AddButton" 
+                                Grid.Column="1"
+                                Content="Добавить" 
+                                Click="OnAddButtonClick" 
+                                Margin="10,0,0,0"
+                                Background="#c4f2d0"
+                                Foreground="Black"
+                                FontSize="16"/>
+                    </Grid>
+                    
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Left" 
+                                Margin="0,0,0,20">
+                        <Button Name="RemoveButton" 
+                                Content="Удалить" 
+                                Click="OnRemoveButtonClick" 
+                                Margin="0,0,10,0"
+                                Background="#F44336" 
+                                Foreground="Black" 
+                                FontSize="16"/>
+                        <Button Name="ClearButton" 
+                                Content="Очистить" 
+                                Click="OnClearButtonClick" 
+                                Margin="0,0,10,0"
+                                Background="#96adf2"
+                                Foreground="Black"
+                                FontSize="16"/>
+                        <Button Name="NextButton" 
+                                Content="Следующий" 
+                                Click="OnNextButtonClick" 
+                                Margin="0,0,10,0"
+                                Background="#8d8df0"
+                                Foreground="Black"
+                                FontSize="16"/>
+                        <Button Name="StartButton" 
+                                Content="В начало" 
+                                Click="OnStartButtonClick" 
+                                Background="#a878eb"
+                                Foreground="Black"
+                                FontSize="16"/>
+                    </StackPanel>
+                    
+                    <Border Background="#F9F9F9" 
+                            CornerRadius="8" 
+                            Padding="15" 
+                            Margin="0,0,0,15"
+                            BorderBrush="#EEEEEE"
+                            BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Grid.Column="0" 
+                                       Text="Текущий элемент:" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,15,10"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" 
+                                       Name="CurrentElementText" 
+                                       FontSize="16" 
+                                       Foreground="#673AB7"
+                                       FontWeight="SemiBold"/>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" 
+                                       Text="Количество элементов:" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,15,10"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" 
+                                       Name="CountText" 
+                                       FontSize="16" 
+                                       Foreground="#673AB7"
+                                       FontWeight="SemiBold"/>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" 
+                                       Text="Список пуст:" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,15,0"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" 
+                                       Name="EmptyText" 
+                                       FontSize="16" 
+                                       Foreground="#673AB7"
+                                       FontWeight="SemiBold"/>
+                        </Grid>
+                    </Border>
+                    
+                    <Border Background="#F9F9F9" 
+                            CornerRadius="8" 
+                            Padding="15"
+                            BorderBrush="#EEEEEE"
+                            BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Все элементы:" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,0,10"/>
+                            <TextBlock Name="ListContent" 
+                                       FontSize="16" 
+                                       Foreground="#333333" 
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
